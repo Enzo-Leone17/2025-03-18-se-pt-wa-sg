@@ -53,7 +53,17 @@ for (let i = 0; i < clientEditOptionsText.length; i++) {
 }
 const clientEditingLabels = ["Row", "Column", "Edit Value"];
 clientSelectInput.addEventListener("change", () => {
-  if (clientSelectInput === "Edit Data") {
+  if (clientSelectInput.value === "Edit Data") {
+    let existingClientEditRow = document.getElementById("client-edit-row");
+    if(clientEdits.contains(existingClientEditRow)) {
+      clientEdits.removeChild(existingClientEditRow); 
+    }
+    let clientEditRow = document.createElement("input");
+    clientEditRow.setAttribute("type", "text");
+    clientEditRow.setAttribute("name", "client-edit-row");
+    clientEditRow.setAttribute("placeholder", "Row Number");
+    clientEditRow.setAttribute("id", "client-edit-row");
+    clientEdits.appendChild(clientEditRow);
   }
 });
 
@@ -82,9 +92,11 @@ let saveRows = 0;
 function createTable(isUpdate = false, filtered = "All") {
   // Create table caption if it doesn't exist
   table.contains(tableCaption) ? null : table.appendChild(tableCaption);
+
   clientEdits.contains(clientSelectInput)
-    ? null
-    : table.appendChild(tableCaption);
+  ? null
+  : clientEdits.appendChild(clientSelectInput);
+
 
   // Get the headers from the first product object if existing
   let tableHeadersData = products[0] ? Object.keys(products[0]) : [];
@@ -149,6 +161,7 @@ function createTable(isUpdate = false, filtered = "All") {
   }
   // Add table to the div
   productTable.appendChild(table);
+
 }
 
 // Update table with new values
